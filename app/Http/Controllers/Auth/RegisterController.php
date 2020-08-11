@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use App\Services\CheckExtensionServices;
+use App\Services\FileUploadServices;
+
 
 class RegisterController extends Controller
 {
@@ -71,20 +73,10 @@ class RegisterController extends Controller
         // 引数 $data から name='img_name' を取得（アップロードするファイル情報）
         $imageFile = $data['img_name'];
         
-        // $imageFile からファイル名（拡張子あり）を取得
-        $filenameWithExt = $imageFile->getClientOriginalName();
+        $list = FileUploadServices::fileUpload($imageFile);
 
-        // 拡張子を除いたファイル名を取得
-        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-
-        // 拡張子を取得
-        $extention = $imageFile->getClientOriginalExtension();
-
-        // ファイル名_時間_拡張子として設定
-        $fileNameToStore = $filename.'_'.time().'.'.$extention;
-
-        // 画像ファイル取得
-        $fileData = file_get_contents($imageFile->getRealPath());
+        // 3つの変数に分割
+        list($extention, $fileNameToStore, $fileData) = $list;
 
         $data_url = CheckExtensionServices::checkExtension($fileData, $extention);
 
