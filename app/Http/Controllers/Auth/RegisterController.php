@@ -8,6 +8,10 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+use App\Services\CheckExtensionServices;
+use App\Services\FileUploadServices;
+
 
 class RegisterController extends Controller
 {
@@ -53,6 +57,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'img_name' => ['file', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2000'],
+            'self_introduction' => ['string', 'max:255'],
         ]);
     }
 
@@ -64,6 +70,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // 引数 $data から name='img_name' を取得（アップロードするファイル情報）
+        $imageFile = $data['img_name'];
+        
+        $list = FileUploadServices::fileUpload($imageFile);
+
+        // 3つの変数に分割
+        list($extention, $fileNameToStore, $fileData) = $list;
+
+        $data_url = CheckExtensionServices::checkExtension($fileData, $extention);
+
+        // 画像アップロード（Imageクラス makeメソッドを使用）
+        $image = Image::make($data_url);
+
+        // 画像を400*400にリサイズして保存
+        $image->resize(400,400)->save(strage_path() . '/app/public/images/' . $fileNameToStore);
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
