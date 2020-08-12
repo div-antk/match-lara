@@ -56,11 +56,11 @@
       <div class="form-group">
         <div><label>性別</label></div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" name="sex" value="0" type="radio" id="inlineRadio1" checked>
+          <input class="form-check-input" name="gender" value="0" type="radio" id="inlineRadio1" checked>
           <label class="form-check-label" for="inlineRadio1">男</label>
         </div>
         <div class="form-check form-check-inline">
-        <input class="form-check-input" name="sex" value="1" type="radio" id="inlineRadio2">
+        <input class="form-check-input" name="gender" value="1" type="radio" id="inlineRadio2">
           <label class="form-check-label" for="inlineRadio2">女</label>
         </div>
       </div>

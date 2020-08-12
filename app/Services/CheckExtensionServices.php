@@ -11,7 +11,7 @@ class CheckExtensionServices
     $extension = mb_strtolower($extension);
 
     // 拡張子ごとにbase64エンコード実施
-    switch($extention) {
+    switch($extension) {
       case 'jpg':
       case 'jpeg':
           $data_url = 'data:image/jpg;base64,'. base64_encode($fileData);
