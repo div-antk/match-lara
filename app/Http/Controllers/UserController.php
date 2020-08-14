@@ -25,6 +25,20 @@ class UserController extends Controller
     {
         $user = User::findorFail($id);
 
+        if(!$request['img_name']){
+            $image_file = $request['img_name'];
+
+            // サービスクラスからの呼び出し
+            $list = FileUploadServices::fileUpload($imageFile);
+            list($extension, $fileNameToStore, $fileData) = $list;
+
+            // サービスクラスからの呼び出し
+            $data_url = CheckExtensionServices::checkExtension($fileData, $extension);
+            $image = Image::make($data_url);
+            $image->resize(400,400)->save(storage_path() . '/app/public/images/' . $fileNameToStore);
+
+            $user->img_name = $fileNameToStore;
+        }
 
         return view('users.show')->with('user', $user);
     }
