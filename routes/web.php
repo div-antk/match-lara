@@ -13,6 +13,8 @@
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
     Route::get('show/{id}', 'UserController@show')->name('users.show');
+    Route::get('edit/{id}', 'UserController@edit')->name('users.edit');
+    Route::post('update/{id}', 'UserController@update')->name('users.update');
 });
 
 Route::get('/', function () {
@@ -22,3 +24,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
