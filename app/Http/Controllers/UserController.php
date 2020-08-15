@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ProfileRequest;
 use App\User;
 
 class UserController extends Controller
@@ -21,7 +22,7 @@ class UserController extends Controller
         return view('users.edit')->with('user', $user);
     }
 
-    public function update(Request $request, $id)
+    public function update(ProfileRequest $request, $id)
     {
         $user = User::findorFail($id);
 
