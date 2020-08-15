@@ -21,7 +21,7 @@ class UserController extends Controller
         return view('users.edit')->with('user', $user);
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
         $user = User::findorFail($id);
 
@@ -40,6 +40,13 @@ class UserController extends Controller
             $user->img_name = $fileNameToStore;
         }
 
-        return view('users.show')->with('user', $user);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->gender = $request->gender;
+        $user->self_introduction = $request->self_introduction;
+
+        $user->save();
+
+        return redirect('home');
     }
 }
