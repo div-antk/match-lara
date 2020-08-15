@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use App\Services\CheckExtensionServices;
+use App\Services\FileUploadServices;
 use App\Http\Requests\ProfileRequest;
 use App\User;
 
@@ -30,7 +33,7 @@ class UserController extends Controller
             $image_file = $request['img_name'];
 
             // サービスクラスからの呼び出し
-            $list = FileUploadServices::fileUpload($imageFile);
+            $list = FileUploadServices::fileUpload($image_file);
             list($extension, $fileNameToStore, $fileData) = $list;
 
             // サービスクラスからの呼び出し
