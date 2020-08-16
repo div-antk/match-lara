@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use App\Services\CheckExtensionServices;
+use App\Services\FileUploadServices;
+use App\Http\Requests\ProfileRequest;
 use App\User;
 
 class UserController extends Controller
@@ -21,15 +25,15 @@ class UserController extends Controller
         return view('users.edit')->with('user', $user);
     }
 
-    public function update($id)
+    public function update(ProfileRequest $request, $id)
     {
         $user = User::findorFail($id);
 
-        if(!$request['img_name']){
+        if(!is_null($request['img_name'])){
             $image_file = $request['img_name'];
 
             // サービスクラスからの呼び出し
-            $list = FileUploadServices::fileUpload($imageFile);
+            $list = FileUploadServices::fileUpload($image_file);
             list($extension, $fileNameToStore, $fileData) = $list;
 
             // サービスクラスからの呼び出し
@@ -40,6 +44,13 @@ class UserController extends Controller
             $user->img_name = $fileNameToStore;
         }
 
-        return view('users.show')->with('user', $user);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->gender = $request->gender;
+        $user->self_introduction = $request->self_introduction;
+
+        $user->save();
+
+        return redirect('home');
     }
 }
