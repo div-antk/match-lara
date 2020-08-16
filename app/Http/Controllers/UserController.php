@@ -29,7 +29,7 @@ class UserController extends Controller
     {
         $user = User::findorFail($id);
 
-        if(!$request['img_name']){
+        if(!is_null($request['img_name'])){
             $image_file = $request['img_name'];
 
             // サービスクラスからの呼び出し
