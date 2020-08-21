@@ -29,6 +29,6 @@ class MatchingController extends Controller
         return view('users.index')->with(
             ['matching_users' => $matching_users],
             ['matching_users_count' => $matching_users_count]
-        )
+        );
     }
 }
