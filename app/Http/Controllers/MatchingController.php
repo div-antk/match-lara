@@ -11,6 +11,7 @@ use App\Constants\Status;
 class MatchingController extends Controller
 {
     public static function index(){
+
         $got_reaction_ids = Reaction::where([
             // to_user_idが自分になる
             ['to_user_id', Auth::id()],
@@ -24,11 +25,11 @@ class MatchingController extends Controller
         
         $matching_users = User::whereIn('id', $matching_ids)->get();
 
-        $matching_users_count = count($matching_users);
+        $match_users_count = count($matching_users);
 
-        return view('users.index')->with(
-            ['matching_users' => $matching_users],
-            ['matching_users_count' => $matching_users_count]
-        );
+        return view('users.index')->with([
+            'matching_users' => $matching_users,
+            'match_users_count' => $match_users_count
+            ]);
     }
 }
