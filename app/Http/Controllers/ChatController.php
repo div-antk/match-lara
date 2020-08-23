@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\ChatRoom;
 use App\ChatRoomUser;
 use App\ChatMessage;
-use App\ChatUser;
+use App\User;
 Use App\Events\ChatPusher;
 use Auth;
 
@@ -25,7 +25,7 @@ class ChatController extends Controller
             ->where('user_id', $matching_user_id)
             ->pluck('chat_room_id');
 
-        if($chat_room_id->isRmpty()){
+        if($chat_room_id->isEmpty()){
 
             ChatRoom::create();
 
@@ -51,15 +51,20 @@ class ChatController extends Controller
 
         $chat_room_user_name = $chat_room_user->name;
 
-        $chat_message = ChatMessage::where('chat_room_id', $chat_room_id)
+        $chat_messages = ChatMessage::where('chat_room_id', $chat_room_id)
             ->orderby('created_at')
             ->get();
-
-        return view('chat.show')-with([
+            
+        return view('chat.show')->with([
             'chat_room_id' => $chat_room_id,
             'chat_room_user' => $chat_room_user,
-            'chat_message' => $chat_message,
+            'chat_messages' => $chat_messages,
             'chat_room_user_name' => $chat_room_user_name
         ]);
+
+        // return view('chat.show', 
+        //     compact('chat_room_id', 'chat_room_user',
+        //     'chat_messages','chat_room_user_name'));
+
     }
 }
